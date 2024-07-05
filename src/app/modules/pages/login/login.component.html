@@ -1,0 +1,53 @@
+<main>
+  <img src="assets/login_img.png" alt="" />
+
+  <section>
+    <h2 style="text-align: center;">Entre no Orange Portfólio</h2>
+    <button mat-stroked-button type="button" location="center" class="google_login__button">
+      <img src="assets/google_icon.svg" alt="Google login" />
+      <span> Entrar com Google</span>
+    </button>
+    <h5>Faça login com email</h5>
+    <form #form="ngForm" (ngSubmit)="login(form)">
+      <!-- input de email -->
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label>Entre com seu email</mat-label>
+        <input
+          matInput
+          placeholder="fulano@email.com"
+          [formControl]="email"
+          (blur)="updateErrorMessageEmail()"
+          required
+        />
+        @if (email.invalid) {
+        <mat-error>{{ errorMessageEmail() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- input de senha -->
+      <mat-form-field [hideRequiredMarker]="true">
+        <mat-label>Entre com sua senha</mat-label>
+        <input
+          matInput
+          [type]="hide() ? 'password' : 'text'"
+          (blur)="updateErrorMessagePassword()"
+          [formControl]="password"
+        />
+        @if (password.invalid) {
+        <mat-error>{{ errorMessagePassword() }}</mat-error>
+        }
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-flat-button style="border-radius: 4px;">Entrar</button>
+      <button mat-button class="signup__button">Cadastre-se</button>
+    </form>
+  </section>
+</main>

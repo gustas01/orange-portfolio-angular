@@ -1,0 +1,49 @@
+main {
+  display: flex;
+  align-items: center;
+  color: #aab4b3;
+  justify-content: space-between;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  flex: 0.70;
+  margin: auto;
+}
+
+.google_login__button {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  min-width: fit-content;
+  align-self: center;
+  margin-bottom: 18px;
+
+  & img {
+    width: 1.6rem;
+    vertical-align: bottom;
+    margin-right: 1rem;
+  }
+}
+
+section form {
+  display: flex;
+  flex-direction: column;
+  min-width: 515px;
+}
+
+.signup__button {
+  width: 30%;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+@media (max-width: 1000px){
+  main > img {
+    display: none;
+  }
+  main {
+    margin-top: 10%
+  }
+}
