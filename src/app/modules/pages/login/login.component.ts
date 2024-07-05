@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
 import {
+  FormBuilder,
   FormControl,
   FormsModule,
   NgForm,
@@ -26,22 +28,25 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  readonly email = new FormControl('', [Validators.required, Validators.email]);
-  readonly password = new FormControl('', [
-    Validators.required,
-    Validators.minLength(8),
-    Validators.pattern(/[?=.*[!@#$%¨&*()_{}/^+=]+/),
-  ]);
-  passwordValid = signal(false);
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {}
+
+  loginForm = this.formBuilder.group({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%¨&*(){}^+=])(?=\S+$).{8,}$/),
+    ])
+  })
 
   errorMessageEmail = signal('');
   errorMessagePassword = signal('');
   hide = signal(true);
 
-  updateErrorMessageEmail() {
-    if (this.email.hasError('required')) {
+  updateErrorMessageEmail() {    
+    if (this.loginForm.get('email')?.hasError('required')) {
       this.errorMessageEmail.set('Email obrigatório');
-    } else if (this.email.hasError('email')) {
+    } else if (this.loginForm.get('email')?.hasError('email')) {
       this.errorMessageEmail.set('Entre com um email válido');
     } else {
       this.errorMessageEmail.set('');
@@ -49,11 +54,11 @@ export class LoginComponent {
   }
 
   updateErrorMessagePassword() {
-    if (this.password.hasError('required')) {
+    if (this.loginForm.get('password')?.hasError('required')) {
       this.errorMessagePassword.set('Senha obrigatória');
-    } else if (this.password.hasError('minlength')) {
+    } else if (this.loginForm.get('password')?.hasError('minlength')) {
       this.errorMessagePassword.set('A senha deve ter pelo menos 8 caracteres');
-    } else if (this.password.hasError('pattern')) {
+    } else if (this.loginForm.get('password')?.hasError('pattern')) {
       this.errorMessagePassword.set('A senha deve conter no mínimo 1 letra maiúscula, 1 minúscula, 1 número e 1 símbolo pelo menos');
     }else {
       this.errorMessagePassword.set('');
@@ -65,5 +70,7 @@ export class LoginComponent {
     event.stopPropagation();
   }
 
-  login(formData: NgForm) {}
+  login() {
+
+  }
 }

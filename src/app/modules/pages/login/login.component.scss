@@ -31,6 +31,12 @@ section form {
   display: flex;
   flex-direction: column;
   min-width: 515px;
+  gap: 8px;
+}
+
+.signin__button{
+  border-radius: 4px;
+  margin-top: 1rem;
 }
 
 .signup__button {

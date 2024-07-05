@@ -8,18 +8,18 @@
       <span> Entrar com Google</span>
     </button>
     <h5>Faça login com email</h5>
-    <form #form="ngForm" (ngSubmit)="login(form)">
+    <form #form="ngForm" [formGroup]="loginForm" (ngSubmit)="login()">
       <!-- input de email -->
       <mat-form-field [hideRequiredMarker]="true">
         <mat-label>Entre com seu email</mat-label>
         <input
           matInput
           placeholder="fulano@email.com"
-          [formControl]="email"
+          formControlName="email"
           (blur)="updateErrorMessageEmail()"
           required
         />
-        @if (email.invalid) {
+        @if (!loginForm.get('email')?.valid) {
         <mat-error>{{ errorMessageEmail() }}</mat-error>
         }
       </mat-form-field>
@@ -31,9 +31,9 @@
           matInput
           [type]="hide() ? 'password' : 'text'"
           (blur)="updateErrorMessagePassword()"
-          [formControl]="password"
+          formControlName="password"
         />
-        @if (password.invalid) {
+        @if (!loginForm.get('password')?.valid) {
         <mat-error>{{ errorMessagePassword() }}</mat-error>
         }
         <button
@@ -46,7 +46,7 @@
           <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
-      <button mat-flat-button style="border-radius: 4px;">Entrar</button>
+      <button mat-flat-button class="signin__button" type="submit" [disabled]="!loginForm.valid">Entrar</button>
       <button mat-button class="signup__button">Cadastre-se</button>
     </form>
   </section>
