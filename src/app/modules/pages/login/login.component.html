@@ -2,8 +2,13 @@
   <img src="assets/login_img.png" alt="" />
 
   <section>
-    <h2 style="text-align: center;">Entre no Orange Portfólio</h2>
-    <button mat-stroked-button type="button" location="center" class="google_login__button">
+    <h2 style="text-align: center">Entre no Orange Portfólio</h2>
+    <button
+      mat-stroked-button
+      type="button"
+      location="center"
+      class="google_login__button"
+    >
       <img src="assets/google_icon.svg" alt="Google login" />
       <span> Entrar com Google</span>
     </button>
@@ -42,11 +47,19 @@
           (click)="clickEvent($event)"
           [attr.aria-label]="'Hide password'"
           [attr.aria-pressed]="hide()"
+          type="button"
         >
           <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
-      <button mat-flat-button class="signin__button" type="submit" [disabled]="!loginForm.valid">Entrar</button>
+      <button
+        mat-flat-button
+        class="signin__button"
+        type="submit"
+        [disabled]="!loginForm.valid"
+      >
+        Entrar
+      </button>
       <button mat-button class="signup__button">Cadastre-se</button>
     </form>
   </section>
