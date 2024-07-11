@@ -1,0 +1,81 @@
+main {
+  display: flex;
+  align-items: center;
+  color: #aab4b3;
+  justify-content: space-between;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  flex: 0.7;
+  margin: auto;
+}
+
+.google_login__button {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  min-width: fit-content;
+  align-self: center;
+  margin-bottom: 18px;
+
+  & img {
+    width: 1.6rem;
+    vertical-align: bottom;
+    margin-right: 1rem;
+  }
+}
+
+section form {
+  display: grid;
+  // flex-direction: column;
+  grid-template-areas:
+    "firstName lastName"
+    "email email"
+    "password password"
+    "register_button register_button";
+  min-width: 515px;
+  gap: 8px;
+}
+
+.signin__button {
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.signin__button a,
+.signin__button p {
+  margin: 0;
+}
+
+.register__button {
+  grid-area: register_button;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.input_firstName {
+  grid-area: firstName;
+}
+
+.input_lastName {
+  grid-area: lastName;
+}
+
+.input_email {
+  grid-area: email;
+}
+
+.input_password {
+  grid-area: password;
+}
+
+@media (max-width: 1000px) {
+  main > img {
+    display: none;
+  }
+  main {
+    margin-top: 10%;
+  }
+}

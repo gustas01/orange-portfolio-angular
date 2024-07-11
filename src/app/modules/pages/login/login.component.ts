@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { RouterModule } from '@angular/router';
 import { AuthService } from 'app/modules/auth/auth.service';
 import { LoginType } from 'app/types/login-type';
 
@@ -25,6 +26,7 @@ import { LoginType } from 'app/types/login-type';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
+    RouterModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

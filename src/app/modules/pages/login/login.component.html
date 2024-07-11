@@ -1,14 +1,9 @@
 <main>
-  <img src="assets/login_img.png" alt="" />
+  <img src="assets/login_img.png" alt="image login" />
 
   <section>
     <h2 style="text-align: center">Entre no Orange Portfólio</h2>
-    <button
-      mat-stroked-button
-      type="button"
-      location="center"
-      class="google_login__button"
-    >
+    <button mat-stroked-button type="button" location="center" class="google_login__button">
       <img src="assets/google_icon.svg" alt="Google login" />
       <span> Entrar com Google</span>
     </button>
@@ -52,15 +47,10 @@
           <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
-      <button
-        mat-flat-button
-        class="signin__button"
-        type="submit"
-        [disabled]="!loginForm.valid"
-      >
+      <button mat-flat-button class="signin__button" type="submit" [disabled]="!loginForm.valid">
         Entrar
       </button>
-      <button mat-button class="signup__button">Cadastre-se</button>
+      <a mat-button class="signup__button" routerLink="register">Cadastre-se</a>
     </form>
   </section>
 </main>

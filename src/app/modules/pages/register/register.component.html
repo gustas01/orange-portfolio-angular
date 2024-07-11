@@ -1,1 +1,90 @@
-<p>register works!</p>
+<main>
+  <img src="assets/register_img.png" alt="image register" />
+  <section>
+    <h2 style="text-align: center">Cadastre-se</h2>
+    <form action="" [formGroup]="registerForm" (ngSubmit)="register()">
+      <!-- input de nome -->
+      <mat-form-field [hideRequiredMarker]="true" class="input_firstName">
+        <mat-label>Nome</mat-label>
+        <input
+          type="text"
+          matInput
+          placeholder="Nome"
+          formControlName="firstName"
+          (blur)="updateErrorMessageFirstName()"
+          required
+        />
+        @if (!registerForm.get('firstName')?.valid) {
+        <mat-error>{{ errorMessageFirstName() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- input de sobrenome -->
+      <mat-form-field [hideRequiredMarker]="true" class="input_lastName">
+        <mat-label>Sobrenome</mat-label>
+        <input
+          matInput
+          placeholder="Sobrenome"
+          formControlName="lastName"
+          (blur)="updateErrorMessageLastName()"
+          required
+        />
+        @if (!registerForm.get('lastName')?.valid) {
+        <mat-error>{{ errorMessageLastName() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- input de email -->
+      <mat-form-field [hideRequiredMarker]="true" class="input_email">
+        <mat-label>Entre com seu email</mat-label>
+        <input
+          matInput
+          placeholder="fulano@email.com"
+          formControlName="email"
+          (blur)="updateErrorMessageEmail()"
+          required
+        />
+        @if (!registerForm.get('email')?.valid) {
+        <mat-error>{{ errorMessageEmail() }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- input de senha -->
+      <mat-form-field [hideRequiredMarker]="true" class="input_password">
+        <mat-label>Entre com sua senha</mat-label>
+        <input
+          matInput
+          [type]="hide() ? 'password' : 'text'"
+          (blur)="updateErrorMessagePassword()"
+          formControlName="password"
+        />
+        @if (!registerForm.get('password')?.valid) {
+        <mat-error>{{ errorMessagePassword() }}</mat-error>
+        }
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+          type="button"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <button
+        mat-flat-button
+        class="register__button"
+        type="submit"
+        [disabled]="!registerForm.valid"
+      >
+        Cadastre-se
+      </button>
+
+      <span style="display: flex; align-items: center"
+        ><p style="margin: 0">Já tem conta?</p>
+        <a mat-button routerLink="" class="signin__button" style="margin: 0"> Faça login</a></span
+      >
+    </form>
+  </section>
+</main>
