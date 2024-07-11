@@ -1,6 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StoreService } from 'app/services/store.service';
 import { LoginType } from 'app/types/login-type';
+import { UserDataType } from 'app/types/user-data-type';
 
 import { environment } from 'environments/environment.dev';
 import { switchMap } from 'rxjs';
@@ -9,7 +12,11 @@ import { switchMap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService implements OnDestroy {
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private _snackBar: MatSnackBar,
+    private storeService: StoreService
+  ) {}
 
   ngOnDestroy(): void {
     //desinscrever do observable de login
@@ -41,8 +48,7 @@ export class AuthService implements OnDestroy {
       .subscribe({
         next: (res) => {
           //TODO: salvar os dados do usuário em algum lugar e navigate para a home
-          console.log('res');
-          console.log(res);
+          this.storeService.setCurrentUser(res as UserDataType);
         },
       });
   }
