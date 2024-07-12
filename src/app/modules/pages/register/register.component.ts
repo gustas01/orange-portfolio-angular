@@ -50,22 +50,22 @@ export class RegisterComponent {
   hide = signal(true);
 
   updateErrorMessageFirstName() {
-    if (this.registerForm.get('firstname')?.hasError('required')) {
-      this.errorMessageEmail.set('Nome obrigatório');
-    } else if (this.registerForm.get('firstname')?.hasError('maxlength')) {
-      this.errorMessageEmail.set('O nome não pode ter mais 30 caracteres');
+    if (this.registerForm.get('firstName')?.hasError('required')) {
+      this.errorMessageFirstName.set('Nome obrigatório');
+    } else if (this.registerForm.get('firstName')?.hasError('maxlength')) {
+      this.errorMessageFirstName.set('O nome não pode ter mais 30 caracteres');
     } else {
-      this.errorMessageEmail.set('');
+      this.errorMessageFirstName.set('');
     }
   }
 
   updateErrorMessageLastName() {
-    if (this.registerForm.get('lastname')?.hasError('required')) {
-      this.errorMessageEmail.set('Nome obrigatório');
-    } else if (this.registerForm.get('lastname')?.hasError('maxlength')) {
-      this.errorMessageEmail.set('O sobrenome não pode ter mais 30 caracteres');
+    if (this.registerForm.get('lastName')?.hasError('required')) {
+      this.errorMessageLastName.set('Sobrenome obrigatório');
+    } else if (this.registerForm.get('lastName')?.hasError('maxlength')) {
+      this.errorMessageLastName.set('O sobrenome não pode ter mais 30 caracteres');
     } else {
-      this.errorMessageEmail.set('');
+      this.errorMessageLastName.set('');
     }
   }
 
