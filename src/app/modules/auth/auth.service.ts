@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { StoreService } from 'app/services/store.service';
 import { LoginType } from 'app/types/login-type';
 import { RegisterType } from 'app/types/register-type';
@@ -16,7 +17,8 @@ export class AuthService implements OnDestroy {
   constructor(
     private httpClient: HttpClient,
     private _snackBar: MatSnackBar,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private router: Router
   ) {}
 
   ngOnDestroy(): void {
@@ -48,6 +50,7 @@ export class AuthService implements OnDestroy {
         next: (res) => {
           //TODO: salvar os dados do usuário em algum lugar e navigate para a home
           this.storeService.setCurrentUser(res as UserDataType);
+          this.router.navigate(['home']);
         },
       });
   }

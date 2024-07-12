@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Component, signal } from '@angular/core';
 import {
@@ -12,7 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router';
+import { MatProgressBarModule, ProgressBarMode } from '@angular/material/progress-bar';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'app/modules/auth/auth.service';
 import { LoginType } from 'app/types/login-type';
 
@@ -20,6 +22,7 @@ import { LoginType } from 'app/types/login-type';
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     MatButtonModule,
     MatIconModule,
@@ -27,24 +30,23 @@ import { LoginType } from 'app/types/login-type';
     ReactiveFormsModule,
     MatInputModule,
     RouterModule,
+    MatProgressBarModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {}
+  logging = signal<boolean>(false);
+  progressBar_mode = signal<ProgressBarMode>('determinate');
+
+  constructor(private formBuilder: FormBuilder, private authService: AuthService) {}
 
   loginForm = this.formBuilder.group({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(
-        /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%¨&*(){}^+=])(?=\S+$).{8,}$/
-      ),
+      Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%¨&*(){}^+=])(?=\S+$).{8,}$/),
     ]),
   });
 
@@ -82,6 +84,7 @@ export class LoginComponent {
   }
 
   login() {
+    this.logging.set(true);
     const loginData: LoginType = this.loginForm.value as LoginType;
     if (this.loginForm.valid) this.authService.login(loginData);
   }

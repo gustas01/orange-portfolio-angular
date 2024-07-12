@@ -50,6 +50,10 @@
       <button mat-flat-button class="signin__button" type="submit" [disabled]="!loginForm.valid">
         Entrar
       </button>
+      <mat-progress-bar
+        mode="indeterminate"
+        [ngStyle]="{ visibility: logging() ? 'visible' : 'hidden' }"
+      ></mat-progress-bar>
       <a mat-button class="signup__button" routerLink="register">Cadastre-se</a>
     </form>
   </section>

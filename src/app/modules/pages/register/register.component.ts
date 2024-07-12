@@ -99,9 +99,6 @@ export class RegisterComponent {
   }
 
   register() {
-    console.log(1231231);
-
-    console.log(this.registerForm.value);
     this.authService.register(this.registerForm.value as RegisterType);
   }
 }
