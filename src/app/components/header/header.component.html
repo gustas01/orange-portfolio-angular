@@ -1,0 +1,15 @@
+<mat-toolbar class="header mat-elevation-z4">
+  <img src="assets/orange_logo.png" alt="orange-logo" />
+  <span class="header__links">
+    <a mat-button routerLink="home">Meus projetos</a>
+    <a mat-button routerLink="">Descobrir</a>
+  </span>
+  <span class="header__icons">
+    <img [src]="user_avatar()" alt="" [matMenuTriggerFor]="beforeMenu" />
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+      <button mat-menu-item>Meu perfil</button>
+      <button mat-menu-item>Sair</button>
+    </mat-menu>
+    <mat-icon mat-ripple>notifications</mat-icon>
+  </span>
+</mat-toolbar>

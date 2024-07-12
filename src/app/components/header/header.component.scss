@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 35px;
+
+  & img:first-of-type {
+    height: 70%;
+  }
+  .header__links {
+    flex-grow: 1;
+    margin-left: 10%;
+  }
+
+  .header__icons {
+    border-radius: 50%;
+    height: 90%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header__icons img {
+    width: 38%;
+    border-radius: 50%;
+  }
+
+  .header__icons mat-icon {
+    padding: 8px;
+    border-radius: 50%;
+  }
+
+  .header__icons img,
+  .header__icons mat-icon {
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 550px) {
+  .header__links {
+    flex-grow: 0 !important;
+    margin-left: 0 !important;
+  }
+}

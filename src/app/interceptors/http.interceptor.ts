@@ -1,8 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, of, throwError } from 'rxjs';
-import { SnackbarMessageComponent } from './snackbar-message/snackbar-message.component';
+import { catchError, of } from 'rxjs';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
