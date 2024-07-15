@@ -26,13 +26,6 @@ export class AuthService implements OnDestroy {
     throw new Error('Method not implemented.');
   }
 
-  private jsonHeaders = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    }),
-  };
-
   login(loginData: LoginType) {
     const response = this.httpClient.post(`${environment.baseUrl}/auth/login`, loginData, {
       withCredentials: true,
@@ -48,7 +41,6 @@ export class AuthService implements OnDestroy {
       )
       .subscribe({
         next: (res) => {
-          //TODO: salvar os dados do usuário em algum lugar e navigate para a home
           this.storeService.setCurrentUser(res as UserDataType);
           this.router.navigate(['home']);
         },
@@ -66,6 +58,29 @@ export class AuthService implements OnDestroy {
     response.subscribe({
       next: (res) => {
         this._snackBar.open('Usuário criado com sucesso!', 'X', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: 'msg-success',
+        });
+      },
+    });
+  }
+
+  logout() {
+    const response = this.httpClient.post(`${environment.baseUrl}/auth/logout`, null, {
+      withCredentials: true,
+    });
+
+    response.subscribe({
+      next: (res) => {
+        this.storeService.removeCurrentUser();
+        this.router.navigate(['']);
+
+        type responseType = { message: string };
+        const message: responseType = res.valueOf() as responseType;
+
+        this._snackBar.open(message.message, 'X', {
           duration: 3000,
           horizontalPosition: 'end',
           verticalPosition: 'top',

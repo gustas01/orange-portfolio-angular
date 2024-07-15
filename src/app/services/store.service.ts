@@ -22,4 +22,8 @@ export class StoreService {
   getCurrentUser() {
     return this.userData();
   }
+
+  removeCurrentUser() {
+    localStorage.removeItem('userdata');
+  }
 }
