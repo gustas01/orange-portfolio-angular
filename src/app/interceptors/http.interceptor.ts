@@ -16,7 +16,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
         duration: 5000,
         panelClass: ['msg-error'],
       });
-      if (err.error.status === 401) router.navigate(['']);
+      if (err.error.status === 401) router.navigate(['login']);
       return of();
     })
   );

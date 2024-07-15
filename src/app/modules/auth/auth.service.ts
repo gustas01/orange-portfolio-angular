@@ -13,18 +13,13 @@ import { switchMap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService implements OnDestroy {
+export class AuthService {
   constructor(
     private httpClient: HttpClient,
     private _snackBar: MatSnackBar,
     private storeService: StoreService,
     private router: Router
   ) {}
-
-  ngOnDestroy(): void {
-    //desinscrever do observable de login
-    throw new Error('Method not implemented.');
-  }
 
   login(loginData: LoginType) {
     const response = this.httpClient.post(`${environment.baseUrl}/auth/login`, loginData, {
@@ -75,7 +70,7 @@ export class AuthService implements OnDestroy {
     response.subscribe({
       next: (res) => {
         this.storeService.removeCurrentUser();
-        this.router.navigate(['']);
+        this.router.navigate(['login']);
 
         type responseType = { message: string };
         const message: responseType = res.valueOf() as responseType;
