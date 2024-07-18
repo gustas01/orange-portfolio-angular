@@ -1,1 +1,61 @@
+<main>
+  <section class="userData">
+    <img [src]="user_avatar()" alt="user avatar" />
+    <div class="userData__header">
+      <h3>{{ userData()?.firstName }} {{ userData()?.lastName }}</h3>
+      <p>Brasil</p>
+      <button mat-flat-button>Adicionar projeto</button>
+    </div>
+  </section>
 
+  <section class="projects">
+    <h4>Meus projetos</h4>
+    <app-autocomplete-chips-form
+      class="autocomplete__form"
+      [tags]="tags"
+      (tagsEmitter)="filterTags($event)"
+    ></app-autocomplete-chips-form>
+
+    <div class="projects__grid">
+      @for (project of myProjects(); track $index) {
+      <!-- TODO: fazer exibição dos projetos filtrados pelas tags -->
+      <mat-card appearance="outlined" class="project__card">
+        <mat-card-header>
+          <img mat-card-avatar [src]="user_avatar()" alt="user avatar" />
+          <mat-card-title [title]="project.title">{{ project.title }} </mat-card-title>
+          <mat-card-subtitle class="project__details">
+            <span
+              >{{ userData()?.firstName }} {{ userData()?.lastName }} •
+              {{ project.createdAt | date : "dd/MM" }}</span
+            >
+          </mat-card-subtitle>
+        </mat-card-header>
+        @if (project.thumbnailUrl) {
+        <img
+          mat-card-image
+          [src]="project.thumbnailUrl"
+          alt="project thumbnail"
+          class="project__thumbnail"
+        />
+        }@else {
+        <img
+          mat-card-image
+          src="assets/image_upload.jpg"
+          alt="project thumbnail"
+          class="project__thumbnail"
+        />
+        }
+        <mat-card-content>
+          <div class="project__tags">
+            <mat-chip-set aria-label="Fish selection">
+              @for (tag of project.tags; track $index) {
+              <mat-chip>{{ tag.tagName }}</mat-chip>
+              }
+            </mat-chip-set>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      }
+    </div>
+  </section>
+</main>
