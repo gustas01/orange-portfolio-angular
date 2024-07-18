@@ -6,7 +6,7 @@ export type UserDataType = {
   projects: Projects[];
 } | null;
 
-type Projects = {
+export type Projects = {
   id: string;
   title: string;
   description: string;

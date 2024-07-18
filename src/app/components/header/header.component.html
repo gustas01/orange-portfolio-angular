@@ -5,11 +5,13 @@
     <a mat-button routerLink="discovery">Descobrir</a>
   </span>
   <span class="header__icons">
-    <img [src]="user_avatar()" alt="" [matMenuTriggerFor]="beforeMenu" />
+    <img [src]="user_avatar()" alt="user avatar" [matMenuTriggerFor]="beforeMenu" />
     <mat-menu #beforeMenu="matMenu" xPosition="before">
-      <button mat-menu-item>Meu perfil</button>
+      <a routerLink="profile" mat-menu-item>Meu perfil</a>
       <button mat-menu-item (click)="logout()">Sair</button>
     </mat-menu>
     <mat-icon mat-ripple>notifications</mat-icon>
   </span>
 </mat-toolbar>
+
+<router-outlet />

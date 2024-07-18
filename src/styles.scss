@@ -1,5 +1,9 @@
 @import "@angular/material/prebuilt-themes/cyan-orange.css";
 
+:root {
+  --text-color: #ccc;
+}
+
 body {
   background-color: #191c1c;
 }
@@ -21,14 +25,4 @@ body {
 .msg-error {
   background-color: #e23131 !important;
   color: white !important;
-}
-
-// 2 classes abaixo são de componentes internos do snackbar
-.mat-mdc-snackbar-surface {
-  background-color: transparent !important;
-  color: #ccc !important;
-}
-
-.mdc-button__label {
-  color: #ccc;
 }

@@ -8,7 +8,7 @@ main {
 section {
   display: flex;
   flex-direction: column;
-  flex: 0.70;
+  flex: 0.7;
   margin: auto;
 }
 
@@ -34,7 +34,7 @@ section form {
   gap: 8px;
 }
 
-.signin__button{
+.signin__button {
   border-radius: 4px;
   margin-top: 1rem;
 }
@@ -45,11 +45,11 @@ section form {
   margin-top: 8px;
 }
 
-@media (max-width: 1000px){
+@media (max-width: 1000px) {
   main > img {
     display: none;
   }
   main {
-    margin-top: 10%
+    margin-top: 10%;
   }
 }

@@ -8,7 +8,7 @@ import { RegisterType } from 'app/types/register-type';
 import { UserDataType } from 'app/types/user-data-type';
 
 import { environment } from 'environments/environment.dev';
-import { switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,20 +26,12 @@ export class AuthService {
       withCredentials: true,
     });
 
-    response
-      .pipe(
-        switchMap((res) =>
-          this.httpClient.get(`${environment.baseUrl}/users/me/data`, {
-            withCredentials: true,
-          })
-        )
-      )
-      .subscribe({
-        next: (res) => {
-          this.storeService.setCurrentUser(res as UserDataType);
-          this.router.navigate(['home']);
-        },
-      });
+    response.pipe(switchMap((res) => this.me())).subscribe({
+      next: (res) => {
+        this.storeService.setCurrentUser(res as UserDataType);
+        this.router.navigate(['home']);
+      },
+    });
   }
 
   register(registerData: RegisterType) {
@@ -82,6 +74,12 @@ export class AuthService {
           panelClass: 'msg-success',
         });
       },
+    });
+  }
+
+  me(): Observable<UserDataType> {
+    return this.httpClient.get<UserDataType>(`${environment.baseUrl}/users/me/data`, {
+      withCredentials: true,
     });
   }
 }
