@@ -1,11 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  effect,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { StoreService } from 'app/services/store.service';
 import { Projects, UserDataType } from 'app/types/user-data-type';
 import { MatInputModule } from '@angular/material/input';
@@ -18,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from 'app/modules/auth/auth.service';
+import { ProjectService } from 'app/services/project.service';
 
 @Component({
   selector: 'app-home',
@@ -43,7 +37,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private httpClient: HttpClient,
     private storeService: StoreService,
-    private authService: AuthService
+    private authService: AuthService,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
@@ -62,20 +57,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  filterTags(newFilteredTags: WritableSignal<string[]>) {
-    // this.filteredtags.set(this.tags().filter((tag) => newFilteredTags().includes(tag.tagName)));
+  filterProjectsByTags(filteredtags: WritableSignal<string[]>) {
+    // this.filteredtags.set(this.tags().filter((tag) => filteredtags().includes(tag.tagName)));
 
-    const filteredProjects: Projects[] = [];
-    newFilteredTags().forEach((t) => {
-      const actualFilteredProjects = this.userData()?.projects?.filter(
-        (p) =>
-          p.tags.map((el) => el.tagName).includes(t) &&
-          !filteredProjects?.some((i) => i.id === p.id)
-      );
-      if (actualFilteredProjects?.length) filteredProjects.push(...actualFilteredProjects);
-    });
-
-    if (newFilteredTags().length === 0) this.myProjects.set(this.userData()?.projects ?? []);
-    else this.myProjects.set(filteredProjects);
+    this.myProjects.set(
+      this.projectService.filterProjectsByTags(
+        this.userData()?.projects as Projects[],
+        filteredtags
+      )
+    );
   }
 }
