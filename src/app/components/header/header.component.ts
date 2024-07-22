@@ -1,4 +1,4 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,18 +24,11 @@ import { UserDataType } from 'app/types/user-data-type';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  userData = signal<UserDataType>(this.storeService.getCurrentUser());
-  user_avatar = signal<string>(this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
+  userData = computed(() => this.storeService.userData());
+  // user_avatar = signal<string>(this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
+  user_avatar = computed(() => this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
 
-  constructor(private storeService: StoreService, private authService: AuthService) {
-    effect(
-      () => {
-        this.userData.set(this.storeService.getCurrentUser());
-        this.user_avatar.set(this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
-      },
-      { allowSignalWrites: true }
-    );
-  }
+  constructor(private storeService: StoreService, private authService: AuthService) {}
 
   logout() {
     this.authService.logout();

@@ -2,13 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ProjectService } from 'app/services/project.service';
 import { StoreService } from 'app/services/store.service';
 import { LoginType } from 'app/types/login-type';
+import { Pageable } from 'app/types/projects-page-type';
 import { RegisterType } from 'app/types/register-type';
-import { UserDataType } from 'app/types/user-data-type';
+import { Project, UserDataType } from 'app/types/user-data-type';
 
 import { environment } from 'environments/environment.dev';
-import { Observable, switchMap } from 'rxjs';
+import { forkJoin, Observable, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +20,8 @@ export class AuthService {
     private httpClient: HttpClient,
     private _snackBar: MatSnackBar,
     private storeService: StoreService,
-    private router: Router
+    private router: Router,
+    private projectService: ProjectService
   ) {}
 
   login(loginData: LoginType) {
@@ -26,12 +29,16 @@ export class AuthService {
       withCredentials: true,
     });
 
-    response.pipe(switchMap((res) => this.me())).subscribe({
-      next: (res) => {
-        this.storeService.setCurrentUser(res as UserDataType);
-        this.router.navigate(['home']);
-      },
-    });
+    response
+      .pipe(switchMap((res) => forkJoin([this.me(), this.projectService.getProjects()])))
+      .subscribe({
+        next: ([res1, res2]) => {
+          const userData = { ...res1, projects: res2.content };
+
+          this.storeService.userData.set(userData as UserDataType);
+          this.router.navigate(['home']);
+        },
+      });
   }
 
   register(registerData: RegisterType) {
@@ -61,7 +68,6 @@ export class AuthService {
 
     response.subscribe({
       next: (res) => {
-        this.storeService.removeCurrentUser();
         this.router.navigate(['login']);
 
         type responseType = { message: string };

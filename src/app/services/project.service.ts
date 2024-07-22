@@ -1,15 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, WritableSignal } from '@angular/core';
-import { Projects } from 'app/types/user-data-type';
+import { CreateProjectDTO } from 'app/types/create-project.dto';
+import { Pageable } from 'app/types/projects-page-type';
+import { Project } from 'app/types/user-data-type';
+import { environment } from 'environments/environment.dev';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectService {
-  constructor(private httpCliente: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
-  filterProjectsByTags(projects: Projects[], filteredtags: WritableSignal<string[]>) {
-    const filteredProjects: Projects[] = [];
+  filterProjectsByTags(projects: Project[], filteredtags: WritableSignal<string[]>) {
+    const filteredProjects: Project[] = [];
     filteredtags().forEach((t) => {
       const actualFilteredProjects = projects?.filter(
         (p) =>
@@ -21,5 +25,24 @@ export class ProjectService {
 
     if (filteredtags().length === 0) return projects;
     else return filteredProjects;
+  }
+
+  createProject(projectData: CreateProjectDTO) {
+    const form = new FormData();
+    form.append('data', new Blob([JSON.stringify(projectData)], { type: 'application/json' }));
+
+    return this.httpClient.post(`${environment.baseUrl}/projects`, form, {
+      withCredentials: true,
+    });
+  }
+
+  getProjects(): Observable<Pageable<Project>> {
+    return this.httpClient.get<Pageable<Project>>(`${environment.baseUrl}/projects/me/data`, {
+      withCredentials: true,
+    });
+  }
+
+  getTags() {
+    return this.httpClient.get(`${environment.baseUrl}/tags`, { withCredentials: true });
   }
 }

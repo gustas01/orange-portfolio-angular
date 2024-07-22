@@ -13,17 +13,4 @@ export class StoreService {
       this.userData.set(JSON.parse(storedUser));
     }
   }
-
-  setCurrentUser(user: UserDataType) {
-    this.userData.set(user);
-    localStorage.setItem('userdata', JSON.stringify(user));
-  }
-
-  getCurrentUser() {
-    return this.userData();
-  }
-
-  removeCurrentUser() {
-    localStorage.removeItem('userdata');
-  }
 }
