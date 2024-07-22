@@ -1,6 +1,6 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal, WritableSignal } from '@angular/core';
 import { StoreService } from 'app/services/store.service';
-import { Projects, UserDataType } from 'app/types/user-data-type';
+import { Project, UserDataType } from 'app/types/user-data-type';
 import { MatInputModule } from '@angular/material/input';
 import { AutocompleteChipsFormComponent } from 'app/components/autocomplete-chips-form/autocomplete-chips-form.component';
 import { TagType } from 'app/types/tag-type';
@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from 'app/modules/auth/auth.service';
 import { ProjectService } from 'app/services/project.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProjectDialogComponent } from 'app/components/project-dialog/project-dialog.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -23,13 +26,14 @@ import { ProjectService } from 'app/services/project.service';
     MatCardModule,
     MatButtonModule,
     MatChipsModule,
+    MatDialogModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  userData = signal<UserDataType>(this.storeService.getCurrentUser());
-  user_avatar = signal<string>(this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
+  userData = computed(() => this.storeService.userData());
+  user_avatar = computed(() => this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
   myProjects = signal(this.userData()?.projects ?? []);
 
   tags = signal<TagType[]>([]);
@@ -38,21 +42,30 @@ export class HomeComponent implements OnInit {
     private httpClient: HttpClient,
     private storeService: StoreService,
     private authService: AuthService,
-    private projectService: ProjectService
-  ) {}
+    private projectService: ProjectService,
+    private dialog: MatDialog
+  ) {
+    effect(
+      () => {
+        this.myProjects.set(this.userData()?.projects ?? []);
+      },
+      { allowSignalWrites: true }
+    );
+  }
 
   ngOnInit(): void {
-    const response = this.httpClient.get(`${environment.baseUrl}/tags`, { withCredentials: true });
-    response.subscribe({
-      next: (res) => {
-        const allTags: TagType[] = res.valueOf() as TagType[];
+    forkJoin([
+      this.authService.me(),
+      this.projectService.getProjects(),
+      this.projectService.getTags(),
+    ]).subscribe({
+      next: ([res1, res2, res3]) => {
+        const userData = { ...res1, projects: res2.content };
+
+        this.storeService.userData.set(userData as UserDataType);
+
+        const allTags: TagType[] = res3.valueOf() as TagType[];
         this.tags.set(allTags);
-      },
-    });
-    this.authService.me().subscribe({
-      next: (res) => {
-        this.userData.set(res);
-        this.myProjects.set(this.userData()?.projects ?? []);
       },
     });
   }
@@ -61,10 +74,15 @@ export class HomeComponent implements OnInit {
     // this.filteredtags.set(this.tags().filter((tag) => filteredtags().includes(tag.tagName)));
 
     this.myProjects.set(
-      this.projectService.filterProjectsByTags(
-        this.userData()?.projects as Projects[],
-        filteredtags
-      )
+      this.projectService.filterProjectsByTags(this.userData()?.projects as Project[], filteredtags)
     );
+  }
+
+  openDialog() {
+    this.dialog.open(ProjectDialogComponent, {
+      data: {
+        tags: this.tags,
+      },
+    });
   }
 }

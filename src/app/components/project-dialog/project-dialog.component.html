@@ -1,0 +1,37 @@
+<main>
+  <h5 mat-dialog-title>Adicionar projeto</h5>
+  <mat-dialog-content>
+    <div class="create_project_visualization">
+      <p>Selecione o conteúdo que você deseja fazer upload</p>
+      <img src="assets/image_upload.svg" alt="" />
+    </div>
+
+    <form class="create_project_form" (ngSubmit)="createProject()" [formGroup]="projectForm">
+      <mat-form-field>
+        <mat-label>Título</mat-label>
+        <input matInput placeholder="Título" formControlName="title" />
+      </mat-form-field>
+
+      <app-autocomplete-chips-form
+        [tags]="data.tags"
+        (tagsEmitter)="selectTags($event)"
+      ></app-autocomplete-chips-form>
+
+      <mat-form-field>
+        <mat-label>Url</mat-label>
+        <input matInput placeholder="Url" formControlName="url" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Descrição</mat-label>
+        <textarea matInput placeholder="Descrição" formControlName="description"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="start" class="create_project_actions">
+    <span>Visualizar publicação</span>
+    <button mat-button mat-dialog-close (click)="createProject()">Salvar</button>
+    <button mat-button mat-dialog-close>Cancelar</button>
+  </mat-dialog-actions>
+</main>

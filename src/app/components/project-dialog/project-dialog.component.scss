@@ -1,0 +1,21 @@
+@import "../../../styles.scss";
+
+main {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+  // margin: 16px;
+}
+
+.mat-mdc-dialog-content {
+  .create_project_visualization {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .create_project_form {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+  }
+}
