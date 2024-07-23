@@ -45,4 +45,10 @@ export class ProjectService {
   getTags() {
     return this.httpClient.get(`${environment.baseUrl}/tags`, { withCredentials: true });
   }
+
+  deleteProject(projectId: string) {
+    return this.httpClient.delete(`${environment.baseUrl}/projects/${projectId}`, {
+      withCredentials: true,
+    });
+  }
 }

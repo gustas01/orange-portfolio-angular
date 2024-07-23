@@ -70,11 +70,32 @@
           align-items: center;
           gap: 8px;
 
-          img:nth-of-type(1) {
-            width: 7%;
-            aspect-ratio: 1;
-            border-radius: 50%;
-            min-width: 30px;
+          // img:nth-of-type(1) {
+          //   width: 7%;
+          //   aspect-ratio: 1;
+          //   border-radius: 50%;
+          //   min-width: 30px;
+          // }
+        }
+      }
+
+      .project__thumbnail__options {
+        position: relative;
+        height: 75%;
+
+        .project__options__button {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          width: 40px;
+          height: 40px;
+          background-color: #7f664c;
+          border-radius: 50%;
+          padding: 0;
+          min-width: 0;
+
+          mat-icon {
+            margin: 0;
           }
         }
       }
@@ -83,7 +104,7 @@
         width: 100%;
         overflow: hidden;
         object-fit: fill;
-        height: 75%;
+        height: 100%;
       }
 
       .mat-mdc-card-content {

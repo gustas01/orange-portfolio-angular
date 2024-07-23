@@ -15,6 +15,9 @@ import { ProjectService } from 'app/services/project.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProjectDialogComponent } from 'app/components/project-dialog/project-dialog.component';
 import { forkJoin } from 'rxjs';
+import { MatMenuModule } from '@angular/material/menu';
+import { ConfirmationDialogComponent } from 'app/components/confirmation-dialog/confirmation-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +30,8 @@ import { forkJoin } from 'rxjs';
     MatButtonModule,
     MatChipsModule,
     MatDialogModule,
+    MatMenuModule,
+    MatIconModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -88,5 +93,16 @@ export class HomeComponent implements OnInit {
       minWidth: '60%',
       maxWidth: 'none',
     });
+  }
+
+  openDialogDeleteProject(projectId: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      restoreFocus: false,
+      data: { projectId },
+    });
+
+    // Manually restore focus to the menu trigger since the element that
+    // opens the dialog won't be in the DOM any more when the dialog closes.
+    // dialogRef.afterClosed().subscribe(() => this.menuTrigger().focus());
   }
 }

@@ -30,21 +30,36 @@
             >
           </mat-card-subtitle>
         </mat-card-header>
-        @if (project.thumbnailUrl) {
-        <img
-          mat-card-image
-          [src]="project.thumbnailUrl"
-          alt="project thumbnail"
-          class="project__thumbnail"
-        />
-        }@else {
-        <img
-          mat-card-image
-          src="assets/no_image.jpg"
-          alt="project thumbnail"
-          class="project__thumbnail"
-        />
-        }
+        <span class="project__thumbnail__options">
+          @if (project.thumbnailUrl) {
+          <img
+            mat-card-image
+            [src]="project.thumbnailUrl"
+            alt="project thumbnail"
+            class="project__thumbnail"
+          />
+          }@else {
+          <img
+            mat-card-image
+            src="assets/no_image.jpg"
+            alt="project thumbnail"
+            class="project__thumbnail"
+          />
+          }
+
+          <button
+            mat-button
+            [matMenuTriggerFor]="project_options"
+            #menuTrigger
+            class="project__options__button"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <mat-menu #project_options="matMenu" xPosition="before">
+            <button mat-menu-item>Editar</button>
+            <button mat-menu-item (click)="openDialogDeleteProject(project.id)">Excluir</button>
+          </mat-menu>
+        </span>
         <mat-card-content>
           <div class="project__tags">
             <mat-chip-set aria-label="Fish selection">
