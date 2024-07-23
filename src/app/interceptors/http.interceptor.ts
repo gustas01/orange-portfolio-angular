@@ -10,7 +10,8 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((err) => {
-      snackBar.open(err.error.message, 'X', {
+      const messages = String(err.error.message).split(',').join(' - ');
+      snackBar.open(messages, 'X', {
         horizontalPosition: 'end',
         verticalPosition: 'top',
         duration: 5000,
