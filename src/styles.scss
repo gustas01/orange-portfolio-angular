@@ -26,3 +26,13 @@ body {
   background-color: #e23131 !important;
   color: white !important;
 }
+
+// 2 classes abaixo são de componentes internos do snackbar
+.mat-mdc-snackbar-surface {
+  background-color: transparent !important;
+  color: #ccc !important;
+}
+
+.mat-mdc-snack-bar-action:not(:disabled) {
+  color: #ccc !important;
+}

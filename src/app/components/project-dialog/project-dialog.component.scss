@@ -4,18 +4,45 @@ main {
   display: flex;
   flex-direction: column;
   color: var(--text-color);
-  // margin: 16px;
+  min-width: 400px;
 }
 
 .mat-mdc-dialog-content {
+  display: flex;
+  gap: 12px;
+
   .create_project_visualization {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+
+    img {
+      height: 280px;
+      padding-bottom: 20px;
+    }
   }
 
   .create_project_form {
     display: flex;
     flex-direction: column;
     width: 200px;
+    flex: 1;
+  }
+}
+
+.create_project_actions {
+  display: flex;
+  align-content: flex-start;
+  padding-top: 0;
+}
+
+@media (max-width: 600px) {
+  .mat-mdc-dialog-content {
+    flex-direction: column;
+  }
+
+  .create_project_form {
+    width: 100% !important;
   }
 }

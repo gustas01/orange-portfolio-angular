@@ -83,6 +83,10 @@ export class HomeComponent implements OnInit {
       data: {
         tags: this.tags,
       },
+      enterAnimationDuration: '500ms',
+      exitAnimationDuration: '500ms',
+      minWidth: '60%',
+      maxWidth: 'none',
     });
   }
 }

@@ -9,7 +9,15 @@
     <form class="create_project_form" (ngSubmit)="createProject()" [formGroup]="projectForm">
       <mat-form-field>
         <mat-label>Título</mat-label>
-        <input matInput placeholder="Título" formControlName="title" />
+        <input
+          matInput
+          placeholder="Título"
+          formControlName="title"
+          (blur)="updateMessageTitle()"
+        />
+        @if (!projectForm.get('title')?.valid) {
+        <mat-error>{{ errorMessageTitle() }}</mat-error>
+        }
       </mat-form-field>
 
       <app-autocomplete-chips-form
@@ -19,19 +27,49 @@
 
       <mat-form-field>
         <mat-label>Url</mat-label>
-        <input matInput placeholder="Url" formControlName="url" />
+        <input
+          matInput
+          placeholder="Url"
+          formControlName="url"
+          type="url"
+          (blur)="updateMessageUrl()"
+        />
+        @if (!projectForm.get('url')?.valid) {
+        <mat-error>{{ errorMessageUrl() }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Descrição</mat-label>
-        <textarea matInput placeholder="Descrição" formControlName="description"></textarea>
+        <textarea
+          matInput
+          placeholder="Descrição"
+          formControlName="description"
+          (blur)="updateMessageDescription()"
+        ></textarea>
+        @if (!projectForm.get('description')?.valid) {
+        <mat-error>{{ errorMessageDescription() }}</mat-error>
+        }
       </mat-form-field>
     </form>
   </mat-dialog-content>
-
-  <mat-dialog-actions align="start" class="create_project_actions">
-    <span>Visualizar publicação</span>
-    <button mat-button mat-dialog-close (click)="createProject()">Salvar</button>
-    <button mat-button mat-dialog-close>Cancelar</button>
-  </mat-dialog-actions>
+  <span>
+    <p style="padding-left: 24px">Visualizar publicação</p>
+    <mat-dialog-actions align="start" class="create_project_actions">
+      <!-- <span> -->
+      <!-- </span> -->
+      <!-- <div> -->
+      <button
+        mat-flat-button
+        color="primary"
+        mat-dialog-close
+        (click)="createProject()"
+        [disabled]="!projectForm.valid"
+      >
+        Salvar
+      </button>
+      <button mat-raised-button mat-dialog-close>Cancelar</button>
+      <!-- </div> -->
+    </mat-dialog-actions>
+  </span>
 </main>

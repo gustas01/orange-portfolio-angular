@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'app/modules/auth/auth.service';
 import { StoreService } from 'app/services/store.service';
 import { Project, UserDataType } from 'app/types/user-data-type';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-project-dialog',
@@ -29,6 +30,7 @@ import { Project, UserDataType } from 'app/types/user-data-type';
     AutocompleteChipsFormComponent,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
   ],
   templateUrl: './project-dialog.component.html',
   styleUrl: './project-dialog.component.scss',
@@ -36,26 +38,26 @@ import { Project, UserDataType } from 'app/types/user-data-type';
 export class ProjectDialogComponent {
   selectedTags = signal<string[]>([]);
 
+  errorMessageTitle = signal('');
+  errorMessageUrl = signal('');
+  errorMessageDescription = signal('');
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { tags: WritableSignal<TagType[]> },
     private formBuilder: FormBuilder,
     private projectService: ProjectService,
     private snackBar: MatSnackBar,
-    private authService: AuthService,
     private storeService: StoreService
-  ) {
-    console.log(data.tags());
-  }
+  ) {}
 
   projectForm = this.formBuilder.group({
-    title: ['', [Validators.required]],
+    title: ['', [Validators.required, Validators.pattern(/^.{3,30}$/)]],
     url: ['', [Validators.required]],
-    description: ['', [Validators.required]],
+    description: ['', [Validators.required, Validators.pattern(/^.{3,350}$/)]],
   });
 
   selectTags(selectedTags: WritableSignal<string[]>) {
     this.selectedTags.set(selectedTags());
-    console.log(this.selectedTags());
   }
 
   createProject() {
@@ -68,14 +70,6 @@ export class ProjectDialogComponent {
           verticalPosition: 'top',
           panelClass: 'msg-success',
         });
-        // const userData = this.storeService.userData();
-        // userData?.projects.push(res as Project);
-        // this.storeService.userData.set(userData);
-        // this.storeService.setCurrentUser(userData);
-        // const abc = {
-        //   ...this.storeService.userData(),
-        //   projects: this.storeService.userData()?.projects.push(res as Project),
-        // } as unknown as UserDataType;
 
         this.storeService.userData.set({
           ...this.storeService.userData(),
@@ -85,5 +79,24 @@ export class ProjectDialogComponent {
         // this.storeService.userData()?.projects.push(res as Project);
       },
     });
+  }
+
+  updateMessageTitle() {
+    if (this.projectForm.get('title')?.hasError('required'))
+      this.errorMessageTitle.set('Título obrigatório!');
+    else if (this.projectForm.get('title')?.hasError('pattern'))
+      this.errorMessageTitle.set('O título deve ter entre 3 e 30 caracteres!');
+  }
+
+  updateMessageUrl() {
+    if (this.projectForm.get('url')?.hasError('required'))
+      this.errorMessageUrl.set('Url obrigatória!');
+  }
+
+  updateMessageDescription() {
+    if (this.projectForm.get('description')?.hasError('required'))
+      this.errorMessageDescription.set('Descrição obrigatória!');
+    else if (this.projectForm.get('description')?.hasError('pattern'))
+      this.errorMessageDescription.set('A descrição deve ter entre 3 e 350 caracteres!');
   }
 }
