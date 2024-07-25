@@ -87,8 +87,8 @@ export class HomeComponent implements OnInit {
     this.dialog.open(ProjectDialogComponent, {
       data: {
         tags: this.tags,
-        projectServiceCallback: (projectData: CreateProjectDTO) =>
-          this.projectService.createProject(projectData),
+        projectServiceCallback: (projectData: CreateProjectDTO, file: File) =>
+          this.projectService.createProject(projectData, file),
         userDataManipulationCallback: (project: Project) =>
           this.addProjectToUserDataCallback(project),
         templateData: {
@@ -108,8 +108,8 @@ export class HomeComponent implements OnInit {
     this.dialog.open(ProjectDialogComponent, {
       data: {
         tags: this.tags,
-        projectServiceCallback: (body: CreateProjectDTO, projectId: string) =>
-          this.projectService.updateProject(projectId, body),
+        projectServiceCallback: (body: CreateProjectDTO, file: File, projectId: string) =>
+          this.projectService.updateProject(body, file, projectId),
         userDataManipulationCallback: (project: Project) => this.updateProjectFronUserData(project),
         templateData: {
           dialogTitle: 'Editar projeto',

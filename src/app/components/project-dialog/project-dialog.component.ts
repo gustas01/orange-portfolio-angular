@@ -12,11 +12,8 @@ import { AutocompleteChipsFormComponent } from '../autocomplete-chips-form/autoc
 import { TagType } from 'app/types/tag-type';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateProjectDTO } from 'app/types/create-project.dto';
-import { ProjectService } from 'app/services/project.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'app/modules/auth/auth.service';
-import { StoreService } from 'app/services/store.service';
-import { Project, UserDataType } from 'app/types/user-data-type';
+import { Project } from 'app/types/user-data-type';
 import { MatButtonModule } from '@angular/material/button';
 import { Observable } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -44,7 +41,8 @@ import { CommonModule } from '@angular/common';
 export class ProjectDialogComponent {
   selectedTags = signal<string[]>(this.data.project.tags.map((t) => t.tagName));
   preSelectedTags = signal<string[]>(this.data.project.tags.map((t) => t.tagName));
-
+  thumbnailImage = signal<string | File | null>(this.data.project.thumbnailUrl);
+  thumbnailFile = signal<File | null>(null);
   loading = signal(false);
 
   errorMessageTitle = signal('');
@@ -55,7 +53,11 @@ export class ProjectDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       tags: WritableSignal<TagType[]>;
-      projectServiceCallback: (project: CreateProjectDTO, id?: string) => Observable<Project>;
+      projectServiceCallback: (
+        project: CreateProjectDTO,
+        file?: File,
+        id?: string
+      ) => Observable<Project>;
       userDataManipulationCallback: (project: Project) => void;
       templateData: {
         dialogTitle: string;
@@ -85,7 +87,11 @@ export class ProjectDialogComponent {
     this.loading.set(true);
     const newProject = { ...this.projectForm.value, tags: this.selectedTags() };
     this.data
-      .projectServiceCallback(newProject as CreateProjectDTO, this.data.project.id)
+      .projectServiceCallback(
+        newProject as CreateProjectDTO,
+        this.thumbnailFile() as File,
+        this.data.project.id
+      )
       .subscribe({
         next: (res) => {
           this.snackBar.open(this.data.templateData.toastMessage, 'X', {
@@ -100,6 +106,16 @@ export class ProjectDialogComponent {
           this.loading.set(false);
         },
       });
+  }
+
+  onFileUpload(event: Event) {
+    const content = event.target as HTMLInputElement;
+    if (content.files && content.files.length > 0) {
+      const file = content.files[0];
+
+      this.thumbnailImage.set(URL.createObjectURL(file));
+      this.thumbnailFile.set(file);
+    }
   }
 
   updateMessageTitle() {

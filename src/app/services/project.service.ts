@@ -27,9 +27,10 @@ export class ProjectService {
     else return filteredProjects;
   }
 
-  createProject(projectData: CreateProjectDTO): Observable<Project> {
+  createProject(projectData: CreateProjectDTO, thumbnaiFile: File): Observable<Project> {
     const form = new FormData();
     form.append('data', new Blob([JSON.stringify(projectData)], { type: 'application/json' }));
+    form.append('image', thumbnaiFile);
 
     return this.httpClient.post<Project>(`${environment.baseUrl}/projects`, form, {
       withCredentials: true,
@@ -52,9 +53,10 @@ export class ProjectService {
     });
   }
 
-  updateProject(projectId: string, body: CreateProjectDTO) {
+  updateProject(body: CreateProjectDTO, thumbnaiFile: File, projectId: string) {
     const form = new FormData();
     form.append('data', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+    form.append('image', thumbnaiFile);
 
     return this.httpClient.put(`${environment.baseUrl}/projects/${projectId}`, form, {
       withCredentials: true,

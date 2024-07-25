@@ -3,7 +3,10 @@
   <mat-dialog-content>
     <div class="create_project_visualization">
       <p>Selecione o conteúdo que você deseja fazer upload</p>
-      <img src="assets/image_upload.svg" alt="" />
+      <label for="fileInput">
+        <img [src]="thumbnailImage() ?? 'assets/image_upload.svg'" alt="" />
+      </label>
+      <input type="file" id="fileInput" style="display: none" (change)="onFileUpload($event)" />
     </div>
 
     <form class="create_project_form" (ngSubmit)="saveProject()" [formGroup]="projectForm">

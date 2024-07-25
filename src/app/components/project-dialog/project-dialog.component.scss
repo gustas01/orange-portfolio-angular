@@ -17,9 +17,24 @@ main {
     flex: 1;
     justify-content: space-between;
 
+    label {
+      cursor: pointer;
+      border-radius: 8px;
+      height: 100%;
+      width: 100%;
+      max-width: 500px;
+      max-height: 300px;
+    }
+    label:hover {
+      background-color: #4c5554;
+    }
+
     img {
-      height: 280px;
-      padding-bottom: 20px;
+      height: 100%;
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+      object-fit: contain;
     }
   }
 
