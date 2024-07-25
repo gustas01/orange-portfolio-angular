@@ -1,12 +1,12 @@
 <main>
-  <h5 mat-dialog-title>Adicionar projeto</h5>
+  <h5 mat-dialog-title>{{ data.templateData.dialogTitle }}</h5>
   <mat-dialog-content>
     <div class="create_project_visualization">
       <p>Selecione o conteúdo que você deseja fazer upload</p>
       <img src="assets/image_upload.svg" alt="" />
     </div>
 
-    <form class="create_project_form" (ngSubmit)="createProject()" [formGroup]="projectForm">
+    <form class="create_project_form" (ngSubmit)="saveProject()" [formGroup]="projectForm">
       <mat-form-field>
         <mat-label>Título</mat-label>
         <input
@@ -22,6 +22,7 @@
 
       <app-autocomplete-chips-form
         [tags]="data.tags"
+        [filteredTags]="preSelectedTags"
         (tagsEmitter)="selectTags($event)"
       ></app-autocomplete-chips-form>
 
@@ -59,14 +60,16 @@
       <button
         mat-flat-button
         color="primary"
-        mat-dialog-close
-        (click)="createProject()"
+        (click)="saveProject()"
         [disabled]="!projectForm.valid"
       >
         Salvar
       </button>
       <button mat-raised-button mat-dialog-close>Cancelar</button>
-      <!-- </div> -->
     </mat-dialog-actions>
+    <mat-progress-bar
+      mode="indeterminate"
+      [ngStyle]="{ visibility: loading() ? 'visible' : 'hidden' }"
+    ></mat-progress-bar>
   </span>
 </main>

@@ -4,6 +4,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogContent,
   MatDialogModule,
+  MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -17,11 +18,15 @@ import { AuthService } from 'app/modules/auth/auth.service';
 import { StoreService } from 'app/services/store.service';
 import { Project, UserDataType } from 'app/types/user-data-type';
 import { MatButtonModule } from '@angular/material/button';
+import { Observable } from 'rxjs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-project-dialog',
   standalone: true,
   imports: [
+    CommonModule,
     MatDialogModule,
     MatDialogTitle,
     MatDialogContent,
@@ -31,54 +36,70 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
+    MatProgressBarModule,
   ],
   templateUrl: './project-dialog.component.html',
   styleUrl: './project-dialog.component.scss',
 })
 export class ProjectDialogComponent {
-  selectedTags = signal<string[]>([]);
+  selectedTags = signal<string[]>(this.data.project.tags.map((t) => t.tagName));
+  preSelectedTags = signal<string[]>(this.data.project.tags.map((t) => t.tagName));
+
+  loading = signal(false);
 
   errorMessageTitle = signal('');
   errorMessageUrl = signal('');
   errorMessageDescription = signal('');
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { tags: WritableSignal<TagType[]> },
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      tags: WritableSignal<TagType[]>;
+      projectServiceCallback: (project: CreateProjectDTO, id?: string) => Observable<Project>;
+      userDataManipulationCallback: (project: Project) => void;
+      templateData: {
+        dialogTitle: string;
+        toastMessage: string;
+      };
+      project: Project;
+    },
     private formBuilder: FormBuilder,
-    private projectService: ProjectService,
     private snackBar: MatSnackBar,
-    private storeService: StoreService
+    private dialogRef: MatDialogRef<ProjectDialogComponent>
   ) {}
 
   projectForm = this.formBuilder.group({
-    title: ['', [Validators.required, Validators.pattern(/^.{3,30}$/)]],
-    url: ['', [Validators.required]],
-    description: ['', [Validators.required, Validators.pattern(/^.{3,350}$/)]],
+    title: [this.data.project.title, [Validators.required, Validators.pattern(/^.{3,30}$/)]],
+    url: [this.data.project.url, [Validators.required]],
+    description: [
+      this.data.project.description,
+      [Validators.required, Validators.pattern(/^.{3,350}$/)],
+    ],
   });
 
   selectTags(selectedTags: WritableSignal<string[]>) {
     this.selectedTags.set(selectedTags());
   }
 
-  createProject() {
+  saveProject() {
+    this.loading.set(true);
     const newProject = { ...this.projectForm.value, tags: this.selectedTags() };
-    this.projectService.createProject(newProject as CreateProjectDTO).subscribe({
-      next: (res) => {
-        this.snackBar.open('Projeto criado com sucesso!', 'X', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top',
-          panelClass: 'msg-success',
-        });
+    this.data
+      .projectServiceCallback(newProject as CreateProjectDTO, this.data.project.id)
+      .subscribe({
+        next: (res) => {
+          this.snackBar.open(this.data.templateData.toastMessage, 'X', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: 'msg-success',
+          });
 
-        this.storeService.userData.set({
-          ...this.storeService.userData(),
-          projects: [...(this.storeService.userData()?.projects as Project[]), res],
-        } as UserDataType);
-
-        // this.storeService.userData()?.projects.push(res as Project);
-      },
-    });
+          this.data.userDataManipulationCallback(res);
+          this.dialogRef.close();
+          this.loading.set(false);
+        },
+      });
   }
 
   updateMessageTitle() {

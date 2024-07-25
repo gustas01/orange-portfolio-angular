@@ -27,17 +27,17 @@ export class ProjectService {
     else return filteredProjects;
   }
 
-  createProject(projectData: CreateProjectDTO) {
+  createProject(projectData: CreateProjectDTO): Observable<Project> {
     const form = new FormData();
     form.append('data', new Blob([JSON.stringify(projectData)], { type: 'application/json' }));
 
-    return this.httpClient.post(`${environment.baseUrl}/projects`, form, {
+    return this.httpClient.post<Project>(`${environment.baseUrl}/projects`, form, {
       withCredentials: true,
     });
   }
 
   getProjects(): Observable<Pageable<Project>> {
-    return this.httpClient.get<Pageable<Project>>(`${environment.baseUrl}/projects/me/data`, {
+    return this.httpClient.get<Pageable<Project>>(`${environment.baseUrl}/projects/data`, {
       withCredentials: true,
     });
   }
@@ -48,6 +48,15 @@ export class ProjectService {
 
   deleteProject(projectId: string) {
     return this.httpClient.delete(`${environment.baseUrl}/projects/${projectId}`, {
+      withCredentials: true,
+    });
+  }
+
+  updateProject(projectId: string, body: CreateProjectDTO) {
+    const form = new FormData();
+    form.append('data', new Blob([JSON.stringify(body)], { type: 'application/json' }));
+
+    return this.httpClient.put(`${environment.baseUrl}/projects/${projectId}`, form, {
       withCredentials: true,
     });
   }

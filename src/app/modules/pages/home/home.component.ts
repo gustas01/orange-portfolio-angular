@@ -18,6 +18,7 @@ import { forkJoin } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
 import { ConfirmationDialogComponent } from 'app/components/confirmation-dialog/confirmation-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { CreateProjectDTO } from 'app/types/create-project.dto';
 
 @Component({
   selector: 'app-home',
@@ -44,7 +45,6 @@ export class HomeComponent implements OnInit {
   tags = signal<TagType[]>([]);
 
   constructor(
-    private httpClient: HttpClient,
     private storeService: StoreService,
     private authService: AuthService,
     private projectService: ProjectService,
@@ -83,10 +83,39 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  openDialog() {
+  openDialogCreateProject() {
     this.dialog.open(ProjectDialogComponent, {
       data: {
         tags: this.tags,
+        projectServiceCallback: (projectData: CreateProjectDTO) =>
+          this.projectService.createProject(projectData),
+        userDataManipulationCallback: (project: Project) =>
+          this.addProjectToUserDataCallback(project),
+        templateData: {
+          dialogTitle: 'Adicionar projeto',
+          toastMessage: 'Projeto criado com sucesso!',
+        },
+        project: { tags: [] },
+      },
+      enterAnimationDuration: '500ms',
+      exitAnimationDuration: '500ms',
+      minWidth: '60%',
+      maxWidth: 'none',
+    });
+  }
+
+  openDialogUpdateProject(project: Project) {
+    this.dialog.open(ProjectDialogComponent, {
+      data: {
+        tags: this.tags,
+        projectServiceCallback: (body: CreateProjectDTO, projectId: string) =>
+          this.projectService.updateProject(projectId, body),
+        userDataManipulationCallback: (project: Project) => this.updateProjectFronUserData(project),
+        templateData: {
+          dialogTitle: 'Editar projeto',
+          toastMessage: 'Edição concluída com sucesso!',
+        },
+        project,
       },
       enterAnimationDuration: '500ms',
       exitAnimationDuration: '500ms',
@@ -100,9 +129,27 @@ export class HomeComponent implements OnInit {
       restoreFocus: false,
       data: { projectId },
     });
+  }
 
-    // Manually restore focus to the menu trigger since the element that
-    // opens the dialog won't be in the DOM any more when the dialog closes.
-    // dialogRef.afterClosed().subscribe(() => this.menuTrigger().focus());
+  addProjectToUserDataCallback(project: Project) {
+    this.storeService.userData.set({
+      ...this.storeService.userData(),
+      projects: [...(this.storeService.userData()?.projects as Project[]), project],
+    } as UserDataType);
+  }
+
+  updateProjectFronUserData(project: Project) {
+    if (this.storeService.userData()?.projects.some((el) => el.id === project.id)) {
+      const projects = this.storeService
+        .userData()
+        ?.projects.filter((el) => el.id !== project.id) as Project[];
+
+      projects.push(project);
+
+      this.storeService.userData.set({
+        ...this.storeService.userData(),
+        projects,
+      } as UserDataType);
+    }
   }
 }
