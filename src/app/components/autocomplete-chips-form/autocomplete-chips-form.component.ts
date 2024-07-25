@@ -33,27 +33,17 @@ import { TagType } from 'app/types/tag-type';
 export class AutocompleteChipsFormComponent {
   @Input({ required: true }) tags = signal<TagType[]>([]);
   @Output() tagsEmitter = new EventEmitter<WritableSignal<string[]>>();
-  filteredTags = signal<string[]>([]);
-  availableTags = signal<string[]>([]);
+  @Input() filteredTags = signal<string[]>([]);
+  availableTags = computed(() =>
+    this.tags()
+      .map((t) => t.tagName)
+      .filter((tagName) => !this.filteredTags().includes(tagName))
+  );
 
-  constructor() {
-    effect(
-      () => {
-        this.availableTags.set(this.tags().map((el) => el.tagName));
-      },
-      { allowSignalWrites: true }
-    );
-  }
+  constructor() {}
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly currentTag = model('');
-
-  readonly autocompleteTags = computed(() => {
-    const currentTag = this.currentTag().toLowerCase();
-    return currentTag
-      ? this.availableTags().filter((tag) => tag.toLowerCase().includes(currentTag))
-      : this.availableTags().slice();
-  });
 
   remove(tag: string): void {
     this.filteredTags.update((tags) => {
@@ -61,7 +51,6 @@ export class AutocompleteChipsFormComponent {
       if (index < 0) {
         return tags;
       }
-      this.availableTags.update((tags) => [...tags, tag]);
 
       tags.splice(index, 1);
       return [...tags];
@@ -73,10 +62,6 @@ export class AutocompleteChipsFormComponent {
     this.filteredTags.update((tags) => [...tags, event.option.viewValue]);
     this.currentTag.set('');
     event.option.deselect();
-    this.availableTags.update((tags) => {
-      tags.splice(this.availableTags().indexOf(event.option.viewValue), 1);
-      return tags;
-    });
 
     //TODO: fazer output mandando esse filteredTags para a Home
     this.tagsEmitter.emit(this.filteredTags);

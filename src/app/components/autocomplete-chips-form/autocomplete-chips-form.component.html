@@ -21,7 +21,7 @@
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
     />
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-      @for (tag of autocompleteTags(); track $index) {
+      @for (tag of availableTags(); track $index) {
       <mat-option [value]="tag">{{ tag }}</mat-option>
       }
     </mat-autocomplete>
