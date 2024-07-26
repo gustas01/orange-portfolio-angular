@@ -1,7 +1,8 @@
-import { Component, Inject, signal, WritableSignal } from '@angular/core';
+import { Component, inject, Inject, signal, WritableSignal } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogContent,
   MatDialogModule,
   MatDialogRef,
@@ -18,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Observable } from 'rxjs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
+import { ShowProjectDetailsDialogComponent } from '../show-project-details-dialog/show-project-details-dialog.component';
 
 @Component({
   selector: 'app-project-dialog',
@@ -41,9 +43,10 @@ import { CommonModule } from '@angular/common';
 export class ProjectDialogComponent {
   selectedTags = signal<string[]>(this.data.project.tags.map((t) => t.tagName));
   preSelectedTags = signal<string[]>(this.data.project.tags.map((t) => t.tagName));
-  thumbnailImage = signal<string | File | null>(this.data.project.thumbnailUrl);
+  thumbnailImage = signal<string | null>(this.data.project.thumbnailUrl);
   thumbnailFile = signal<File | null>(null);
   loading = signal(false);
+  readonly dialog = inject(MatDialog);
 
   errorMessageTitle = signal('');
   errorMessageUrl = signal('');
@@ -135,5 +138,26 @@ export class ProjectDialogComponent {
       this.errorMessageDescription.set('Descrição obrigatória!');
     else if (this.projectForm.get('description')?.hasError('pattern'))
       this.errorMessageDescription.set('A descrição deve ter entre 3 e 350 caracteres!');
+  }
+
+  openDialogShowPub() {
+    const tags = this.data.project.tags.map((el) => el.tagName);
+
+    this.dialog.open(ShowProjectDetailsDialogComponent, {
+      data: {
+        project: this.data.project.id
+          ? {
+              ...this.data.project,
+              tags,
+            }
+          : {
+              ...this.projectForm.value,
+              tags: this.selectedTags(),
+              thumbnailUrl: this.thumbnailImage(),
+            },
+      },
+      minWidth: '80%',
+      maxWidth: 'none',
+    });
   }
 }

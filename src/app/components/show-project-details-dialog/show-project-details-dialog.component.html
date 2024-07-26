@@ -1,0 +1,30 @@
+<main>
+  <header>
+    <div class="metadata">
+      <img [src]="userData()?.avatarUrl" alt="author avatar" />
+      <span>
+        <p style="margin: 0">
+          <b> {{ userData()?.firstName }} {{ userData()?.lastName }}</b>
+        </p>
+        <span>{{ data.project.createdAt | date : "dd/MM" }}</span>
+      </span>
+    </div>
+    <h2 mat-dialog-title>{{ data.project.title }}</h2>
+    <mat-chip-set aria-label="Tags selection" class="tags">
+      @for (tag of data.project.tags; track $index) {
+      <mat-chip>{{ tag }}</mat-chip>
+      }
+    </mat-chip-set>
+  </header>
+
+  <img
+    [src]="data.project.thumbnailUrl ?? 'assets/no_image.jpg'"
+    alt="project thumbnail"
+    class="project_thumbnail"
+  />
+
+  <p style="margin-top: 30px">{{ data.project.description }}</p>
+
+  <span><b> Download</b></span>
+  <p>{{ data.project.url }}</p>
+</main>
