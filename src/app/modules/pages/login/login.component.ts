@@ -108,6 +108,9 @@ export class LoginComponent {
             this.storeService.userData.set(userData as UserDataType);
             this.router.navigate(['home']);
           },
+          complete: () => {
+            this.logging.set(false);
+          },
         });
   }
 }

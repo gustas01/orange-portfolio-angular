@@ -106,6 +106,8 @@ export class ProjectDialogComponent {
 
           this.data.userDataManipulationCallback(res);
           this.dialogRef.close();
+        },
+        complete: () => {
           this.loading.set(false);
         },
       });

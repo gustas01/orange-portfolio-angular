@@ -48,6 +48,9 @@ export class ConfirmationDialogComponent {
           projects,
         } as UserDataType);
       },
+      complete: () => {
+        this.loading.set(false);
+      },
     });
   }
 }

@@ -47,8 +47,7 @@ main {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 90%;
-          padding: 0 0 0 16px;
+          max-width: 300px;
         }
 
         .project__details {

@@ -1,7 +1,7 @@
 <main>
   <header>
     <div class="metadata">
-      <img [src]="userData()?.avatarUrl" alt="author avatar" />
+      <img [src]="userData()?.avatarUrl ?? 'assets/user_icon_2.png'" alt="author avatar" />
       <span>
         <p style="margin: 0">
           <b> {{ userData()?.firstName }} {{ userData()?.lastName }}</b>
@@ -27,4 +27,5 @@
 
   <span><b> Download</b></span>
   <p>{{ data.project.url }}</p>
+  <button mat-raised-button mat-dialog-close>Fechar</button>
 </main>
