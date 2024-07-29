@@ -62,4 +62,10 @@ export class ProjectService {
       withCredentials: true,
     });
   }
+
+  discoveryProjects(): Observable<Pageable<Project>> {
+    return this.httpClient.get<Pageable<Project>>(`${environment.baseUrl}/projects/discovery`, {
+      withCredentials: true,
+    });
+  }
 }

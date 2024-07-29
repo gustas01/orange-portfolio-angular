@@ -17,7 +17,11 @@
     ></app-autocomplete-chips-form>
 
     <div class="projects__grid">
-      @for (project of myProjects(); track $index) {
+      @if (loading()) {
+      <span class="spinner_container">
+        <mat-spinner></mat-spinner>
+      </span>
+      } @for (project of myProjects(); track $index) {
       <!-- TODO: fazer exibição dos projetos filtrados pelas tags -->
       <mat-card appearance="outlined" class="project__card">
         <mat-card-header>

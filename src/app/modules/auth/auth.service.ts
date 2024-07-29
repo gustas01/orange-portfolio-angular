@@ -19,26 +19,13 @@ export class AuthService {
   constructor(
     private httpClient: HttpClient,
     private _snackBar: MatSnackBar,
-    private storeService: StoreService,
-    private router: Router,
-    private projectService: ProjectService
+    private router: Router
   ) {}
 
   login(loginData: LoginType) {
-    const response = this.httpClient.post(`${environment.baseUrl}/auth/login`, loginData, {
+    return this.httpClient.post(`${environment.baseUrl}/auth/login`, loginData, {
       withCredentials: true,
     });
-
-    response
-      .pipe(switchMap((res) => forkJoin([this.me(), this.projectService.getProjects()])))
-      .subscribe({
-        next: ([res1, res2]) => {
-          const userData = { ...res1, projects: res2.content };
-
-          this.storeService.userData.set(userData as UserDataType);
-          this.router.navigate(['home']);
-        },
-      });
   }
 
   register(registerData: RegisterType) {

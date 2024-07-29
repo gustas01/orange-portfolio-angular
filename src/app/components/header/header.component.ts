@@ -25,7 +25,6 @@ import { UserDataType } from 'app/types/user-data-type';
 })
 export class HeaderComponent {
   userData = computed(() => this.storeService.userData());
-  // user_avatar = signal<string>(this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
   user_avatar = computed(() => this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
 
   constructor(private storeService: StoreService, private authService: AuthService) {}

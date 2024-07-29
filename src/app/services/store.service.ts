@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, OnInit, signal } from '@angular/core';
+import { AuthService } from 'app/modules/auth/auth.service';
 import { UserDataType } from 'app/types/user-data-type';
 
 @Injectable({
@@ -7,10 +8,11 @@ import { UserDataType } from 'app/types/user-data-type';
 export class StoreService {
   userData = signal<UserDataType>(null);
 
-  constructor() {
-    const storedUser = localStorage.getItem('userdata');
-    if (storedUser) {
-      this.userData.set(JSON.parse(storedUser));
-    }
+  constructor(private authService: AuthService) {
+    this.authService.me().subscribe({
+      next: (res) => {
+        this.userData.set(res);
+      },
+    });
   }
 }

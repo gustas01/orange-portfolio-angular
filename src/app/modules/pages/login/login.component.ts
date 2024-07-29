@@ -16,7 +16,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule, ProgressBarMode } from '@angular/material/progress-bar';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'app/modules/auth/auth.service';
+import { ProjectService } from 'app/services/project.service';
+import { StoreService } from 'app/services/store.service';
 import { LoginType } from 'app/types/login-type';
+import { UserDataType } from 'app/types/user-data-type';
+import { forkJoin, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +43,13 @@ export class LoginComponent {
   logging = signal<boolean>(false);
   progressBar_mode = signal<ProgressBarMode>('determinate');
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private storeService: StoreService,
+    private router: Router,
+    private projectService: ProjectService
+  ) {}
 
   loginForm = this.formBuilder.group({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -86,6 +96,18 @@ export class LoginComponent {
   login() {
     this.logging.set(true);
     const loginData: LoginType = this.loginForm.value as LoginType;
-    if (this.loginForm.valid) this.authService.login(loginData);
+    if (this.loginForm.valid)
+      this.authService
+        .login(loginData)
+        .pipe(
+          switchMap((res) => forkJoin([this.authService.me(), this.projectService.getProjects()]))
+        )
+        .subscribe({
+          next: ([res1, res2]) => {
+            const userData = { ...res1, projects: res2.content };
+            this.storeService.userData.set(userData as UserDataType);
+            this.router.navigate(['home']);
+          },
+        });
   }
 }

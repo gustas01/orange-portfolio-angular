@@ -1,1 +1,62 @@
-<p>discovery works!</p>
+<main>
+  <h2>
+    Junte-se à comunidade de inovação, inspiração e descobertas, transformando experiências em
+    conexões inesquecíveis.
+  </h2>
+
+  <app-autocomplete-chips-form
+    [tags]="tags"
+    (tagsEmitter)="filterProjectsByTags($event)"
+    class="autocomplete__form"
+  ></app-autocomplete-chips-form>
+
+  <div class="projects__grid">
+    @if (loading()) {
+    <mat-spinner></mat-spinner>
+    } @for (project of (discoveryProjects()); track $index) {
+    <!-- TODO: fazer exibição dos projetos filtrados pelas tags -->
+    <mat-card appearance="outlined" class="project__card">
+      <mat-card-header>
+        <img
+          mat-card-avatar
+          [src]="project.author?.avatarUrl ?? 'assets/user_icon_1.png'"
+          alt="user avatar"
+        />
+        <mat-card-title [title]="project.title">{{ project.title }} </mat-card-title>
+        <mat-card-subtitle class="project__details">
+          <span
+            >{{ project.author?.firstName }} {{ project.author?.lastName }} •
+            {{ project.createdAt | date : "dd/MM" }}</span
+          >
+        </mat-card-subtitle>
+      </mat-card-header>
+      <span class="project__thumbnail__options">
+        @if (project.thumbnailUrl) {
+        <img
+          mat-card-image
+          [src]="project.thumbnailUrl"
+          alt="project thumbnail"
+          class="project__thumbnail"
+        />
+        }@else {
+        <img
+          mat-card-image
+          src="assets/no_image.jpg"
+          alt="project thumbnail"
+          class="project__thumbnail"
+        />
+        }
+      </span>
+      <mat-card-content>
+        <div class="project__tags">
+          <mat-chip-set aria-label="Tags selection">
+            @for (tag of project.tags; track $index) {
+            <mat-chip>{{ tag.tagName }}</mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>
+</main>

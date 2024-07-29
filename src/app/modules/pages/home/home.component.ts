@@ -4,8 +4,6 @@ import { Project, UserDataType } from 'app/types/user-data-type';
 import { MatInputModule } from '@angular/material/input';
 import { AutocompleteChipsFormComponent } from 'app/components/autocomplete-chips-form/autocomplete-chips-form.component';
 import { TagType } from 'app/types/tag-type';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'environments/environment.dev';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -19,6 +17,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ConfirmationDialogComponent } from 'app/components/confirmation-dialog/confirmation-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CreateProjectDTO } from 'app/types/create-project.dto';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +32,7 @@ import { CreateProjectDTO } from 'app/types/create-project.dto';
     MatDialogModule,
     MatMenuModule,
     MatIconModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -41,8 +41,9 @@ export class HomeComponent implements OnInit {
   userData = computed(() => this.storeService.userData());
   user_avatar = computed(() => this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
   myProjects = signal(this.userData()?.projects ?? []);
-
   tags = signal<TagType[]>([]);
+
+  loading = signal(true);
 
   constructor(
     private storeService: StoreService,
@@ -71,8 +72,12 @@ export class HomeComponent implements OnInit {
 
         const allTags: TagType[] = res3.valueOf() as TagType[];
         this.tags.set(allTags);
+
+        this.loading.set(false);
       },
     });
+
+    // this.loading.set()
   }
 
   filterProjectsByTags(filteredtags: WritableSignal<string[]>) {

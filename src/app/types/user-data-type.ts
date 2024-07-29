@@ -15,5 +15,6 @@ export type Project = {
   url: string | null;
   thumbnailUrl: string | null;
   createdAt: string;
+  author?: UserDataType;
   tags: TagType[];
 };
