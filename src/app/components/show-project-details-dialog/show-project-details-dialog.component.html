@@ -1,10 +1,20 @@
 <main>
   <header>
     <div class="metadata">
-      <img [src]="userData()?.avatarUrl ?? 'assets/user_icon_2.png'" alt="author avatar" />
+      <img
+        [src]="
+          data.project.author?.email
+            ? data.project.author?.avatarUrl ?? 'assets/user_icon_1.png'
+            : userData()?.avatarUrl ?? 'assets/user_icon_2.png'
+        "
+        alt="author avatar"
+      />
       <span>
         <p style="margin: 0">
-          <b> {{ userData()?.firstName }} {{ userData()?.lastName }}</b>
+          <b>
+            {{ data.project.author?.firstName ?? userData()?.firstName }}
+            {{ data.project.author?.lastName ?? userData()?.lastName }}</b
+          >
         </p>
         <span>{{ data.project.createdAt | date : "dd/MM" }}</span>
       </span>

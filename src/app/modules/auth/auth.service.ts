@@ -1,16 +1,13 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, OnDestroy } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ProjectService } from 'app/services/project.service';
-import { StoreService } from 'app/services/store.service';
 import { LoginType } from 'app/types/login-type';
-import { Pageable } from 'app/types/projects-page-type';
 import { RegisterType } from 'app/types/register-type';
-import { Project, UserDataType } from 'app/types/user-data-type';
+import { UserDataType } from 'app/types/user-data-type';
 
 import { environment } from 'environments/environment.dev';
-import { forkJoin, Observable, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
