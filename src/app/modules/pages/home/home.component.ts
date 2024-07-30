@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CreateProjectDTO } from 'app/types/create-project.dto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ShowProjectDetailsDialogComponent } from 'app/components/show-project-details-dialog/show-project-details-dialog.component';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-home',
@@ -34,6 +35,7 @@ import { ShowProjectDetailsDialogComponent } from 'app/components/show-project-d
     MatMenuModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -43,6 +45,10 @@ export class HomeComponent implements OnInit {
   user_avatar = computed(() => this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
   myProjects = signal(this.userData()?.projects ?? []);
   tags = signal<TagType[]>([]);
+
+  page = signal(0);
+  pageSize = signal(10);
+  totalElements = signal(0);
 
   loading = signal(true);
 
@@ -68,6 +74,9 @@ export class HomeComponent implements OnInit {
     ]).subscribe({
       next: ([res1, res2, res3]) => {
         const userData = { ...res1, projects: res2.content };
+
+        this.page.set(res2.number);
+        this.totalElements.set(res2.totalElements);
 
         this.storeService.userData.set(userData as UserDataType);
 
@@ -165,6 +174,23 @@ export class HomeComponent implements OnInit {
       minWidth: '80%',
       maxWidth: 'none',
       autoFocus: false,
+    });
+  }
+
+  handlePageEvent(e: PageEvent) {
+    this.loading.set(true);
+    this.page.set(e.pageIndex);
+    this.pageSize.set(e.pageSize);
+
+    this.projectService.getProjects(this.page(), this.pageSize()).subscribe({
+      next: (res) => {
+        this.storeService.userData.set({
+          ...this.storeService.userData(),
+          projects: res.content,
+        } as UserDataType);
+
+        this.loading.set(false);
+      },
     });
   }
 }

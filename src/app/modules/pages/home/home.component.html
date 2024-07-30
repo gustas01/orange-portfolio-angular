@@ -78,5 +78,14 @@
       </mat-card>
       }
     </div>
+
+    <mat-paginator
+      [length]="this.totalElements()"
+      [pageSize]="this.pageSize()"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Selecione a página"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
   </section>
 </main>

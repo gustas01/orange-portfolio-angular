@@ -37,10 +37,13 @@ export class ProjectService {
     });
   }
 
-  getProjects(): Observable<Pageable<Project>> {
-    return this.httpClient.get<Pageable<Project>>(`${environment.baseUrl}/projects/data`, {
-      withCredentials: true,
-    });
+  getProjects(page: number = 0, size: number = 10): Observable<Pageable<Project>> {
+    return this.httpClient.get<Pageable<Project>>(
+      `${environment.baseUrl}/projects/data?page=${page}&size=${size}`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   getTags() {
