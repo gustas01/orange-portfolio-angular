@@ -36,3 +36,17 @@ body {
 .mat-mdc-snack-bar-action:not(:disabled) {
   color: #ccc !important;
 }
+
+::-webkit-scrollbar {
+  background-color: #333;
+  border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #444;
+}
