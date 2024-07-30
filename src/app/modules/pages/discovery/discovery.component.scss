@@ -48,6 +48,11 @@ main {
           overflow: hidden;
           text-overflow: ellipsis;
           max-width: 300px;
+          cursor: pointer;
+        }
+
+        .mat-mdc-card-title:hover {
+          text-decoration: underline;
         }
 
         .project__details {

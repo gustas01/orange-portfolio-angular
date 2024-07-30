@@ -22,7 +22,9 @@
           [src]="project.author?.avatarUrl ?? 'assets/user_icon_1.png'"
           alt="user avatar"
         />
-        <mat-card-title [title]="project.title">{{ project.title }} </mat-card-title>
+        <mat-card-title [title]="project.title" class="project_title"
+          ><span (click)="open_project_details(project)">{{ project.title }}</span>
+        </mat-card-title>
         <mat-card-subtitle class="project__details">
           <span
             >{{ project.author?.firstName }} {{ project.author?.lastName }} •

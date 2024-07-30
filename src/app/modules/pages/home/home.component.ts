@@ -18,6 +18,7 @@ import { ConfirmationDialogComponent } from 'app/components/confirmation-dialog/
 import { MatIconModule } from '@angular/material/icon';
 import { CreateProjectDTO } from 'app/types/create-project.dto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ShowProjectDetailsDialogComponent } from 'app/components/show-project-details-dialog/show-project-details-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -76,8 +77,6 @@ export class HomeComponent implements OnInit {
         this.loading.set(false);
       },
     });
-
-    // this.loading.set()
   }
 
   filterProjectsByTags(filteredtags: WritableSignal<string[]>) {
@@ -156,5 +155,16 @@ export class HomeComponent implements OnInit {
         projects,
       } as UserDataType);
     }
+  }
+
+  open_project_details(project: Project) {
+    const tags = project.tags.map((el) => el.tagName);
+
+    const dialog = this.dialog.open(ShowProjectDetailsDialogComponent, {
+      data: { project: { ...project, tags } },
+      minWidth: '80%',
+      maxWidth: 'none',
+      autoFocus: false,
+    });
   }
 }

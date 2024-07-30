@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AutocompleteChipsFormComponent } from 'app/components/autocomplete-chips-form/autocomplete-chips-form.component';
+import { ShowProjectDetailsDialogComponent } from 'app/components/show-project-details-dialog/show-project-details-dialog.component';
 import { ProjectService } from 'app/services/project.service';
 import { StoreService } from 'app/services/store.service';
 import { TagType } from 'app/types/tag-type';
@@ -30,7 +32,7 @@ export class DiscoveryComponent implements OnInit {
 
   loading = signal(true);
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectService: ProjectService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     forkJoin([this.projectService.discoveryProjects(), this.projectService.getTags()]).subscribe({
@@ -50,5 +52,16 @@ export class DiscoveryComponent implements OnInit {
         filteredtags
       )
     );
+  }
+
+  open_project_details(project: Project) {
+    const tags = project.tags.map((el) => el.tagName);
+
+    const dialog = this.dialog.open(ShowProjectDetailsDialogComponent, {
+      data: { project: { ...project, tags } },
+      minWidth: '80%',
+      maxWidth: 'none',
+      autoFocus: false,
+    });
   }
 }

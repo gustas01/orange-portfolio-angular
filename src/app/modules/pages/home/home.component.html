@@ -26,7 +26,9 @@
       <mat-card appearance="outlined" class="project__card">
         <mat-card-header>
           <img mat-card-avatar [src]="user_avatar()" alt="user avatar" />
-          <mat-card-title [title]="project.title">{{ project.title }} </mat-card-title>
+          <mat-card-title [title]="project.title" class="project_title"
+            ><span (click)="open_project_details(project)">{{ project.title }}</span>
+          </mat-card-title>
           <mat-card-subtitle class="project__details">
             <span
               >{{ userData()?.firstName }} {{ userData()?.lastName }} •

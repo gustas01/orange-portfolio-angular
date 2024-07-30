@@ -25,7 +25,7 @@
 
   <p style="margin-top: 30px">{{ data.project.description }}</p>
 
-  <span><b> Download</b></span>
-  <p>{{ data.project.url }}</p>
+  <span><b>Download</b></span>
+  <a [href]="data.project.url">{{ data.project.url }}</a>
   <button mat-raised-button mat-dialog-close>Fechar</button>
 </main>
