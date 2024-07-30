@@ -10,10 +10,14 @@
     class="autocomplete__form"
   ></app-autocomplete-chips-form>
 
+  <mat-progress-bar
+    mode="indeterminate"
+    style="margin-bottom: 8px"
+    [ngStyle]="{ visibility: loading() ? 'visible' : 'hidden' }"
+  ></mat-progress-bar>
+
   <div class="projects__grid">
-    @if (loading()) {
-    <mat-spinner></mat-spinner>
-    } @for (project of (discoveryProjects()); track $index) {
+    @for (project of (discoveryProjects()); track $index) {
     <!-- TODO: fazer exibição dos projetos filtrados pelas tags -->
     <mat-card appearance="outlined" class="project__card">
       <mat-card-header>
@@ -61,4 +65,14 @@
     </mat-card>
     }
   </div>
+
+  <mat-paginator
+    [length]="this.totalElements()"
+    [pageSize]="this.pageSize()"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Selecione a página"
+    (page)="handlePageEvent($event)"
+    style="margin-top: 20px; align-self: flex-start"
+  >
+  </mat-paginator>
 </main>

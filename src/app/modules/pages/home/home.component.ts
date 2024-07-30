@@ -20,6 +20,7 @@ import { CreateProjectDTO } from 'app/types/create-project.dto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ShowProjectDetailsDialogComponent } from 'app/components/show-project-details-dialog/show-project-details-dialog.component';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +37,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
     MatIconModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
+    MatProgressBarModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
