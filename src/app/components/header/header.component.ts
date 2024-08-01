@@ -27,7 +27,9 @@ export class HeaderComponent {
   userData = computed(() => this.storeService.userData());
   user_avatar = computed(() => this.userData()?.avatarUrl ?? 'assets/user_icon_2.png');
 
-  constructor(private storeService: StoreService, private authService: AuthService) {}
+  constructor(private storeService: StoreService, private authService: AuthService) {
+    this.storeService.getUserData();
+  }
 
   logout() {
     this.authService.logout();
