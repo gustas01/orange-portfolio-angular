@@ -113,4 +113,8 @@ export class LoginComponent {
           },
         });
   }
+
+  loginGoogle() {
+    this.authService.loginGoogle();
+  }
 }

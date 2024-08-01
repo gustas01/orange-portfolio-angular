@@ -20,6 +20,11 @@ export const routes: Routes = [
     component: HeaderComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
         path: 'home',
         component: HomeComponent,
       },

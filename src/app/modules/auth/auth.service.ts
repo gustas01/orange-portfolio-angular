@@ -72,4 +72,8 @@ export class AuthService {
       withCredentials: true,
     });
   }
+
+  loginGoogle() {
+    window.location.href = `${environment.baseUrl}/auth/login/google`;
+  }
 }

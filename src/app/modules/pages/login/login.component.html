@@ -3,7 +3,13 @@
 
   <section>
     <h2 style="text-align: center">Entre no Orange Portfólio</h2>
-    <button mat-stroked-button type="button" location="center" class="google_login__button">
+    <button
+      mat-stroked-button
+      type="button"
+      location="center"
+      class="google_login__button"
+      (click)="loginGoogle()"
+    >
       <img src="assets/google_icon.svg" alt="Google login" />
       <span> Entrar com Google</span>
     </button>
